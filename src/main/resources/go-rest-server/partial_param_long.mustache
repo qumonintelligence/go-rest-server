@@ -1,0 +1,34 @@
+{{#isQueryParam}}
+    {{#isNullable}}
+    if api.{{paramName}}, api.Error = api.GetQueryInt64Nullable("{{baseName}}",{{#defaultValue}}
+        validate.DefaultInt64({{defaultValue}}),{{/defaultValue}}
+    ); api.Error != nil {
+        c.JSON(http.StatusBadRequest, api.Error)
+        return
+    }
+    {{/isNullable}}
+    {{^isNullable}}
+        {{#required}}
+            if api.{{paramName}}, api.Error = api.GetQueryInt64("{{baseName}}"); api.Error != nil {
+                c.JSON(http.StatusBadRequest, api.Error)
+                return
+            }
+        {{/required}}
+        {{^required}}
+            if api.{{paramName}}, api.Error = api.GetQueryInt64Nullable("{{baseName}}",{{#defaultValue}}
+                validate.DefaultInt64({{defaultValue}}),{{/defaultValue}}
+            ); api.Error != nil {
+                c.JSON(http.StatusBadRequest, api.Error)
+                return
+            }
+        {{/required}}
+    {{/isNullable}}
+    {{/isQueryParam}}
+    {{^isQueryParam}}
+    {{#isFormParam}}
+    api.{{paramName}} = c.PostForm("{{baseName}}")
+    {{/isFormParam}}
+    {{^isFormParam}}
+    api.{{paramName}} = c.Param("{{baseName}}")
+    {{/isFormParam}}
+    {{/isQueryParam}}

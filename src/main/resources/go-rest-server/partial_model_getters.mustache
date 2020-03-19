@@ -1,0 +1,11 @@
+{{#vars}}{{^vendorExtensions.x-go-mongo-id}}
+// Get{{name}} get {{name}}
+func (m *{{classname}}) Get{{name}} () {{#isFreeFormObject}}map[string]interface{}{{/isFreeFormObject}}{{^isFreeFormObject}}{{#isBinary}}*multipart.FileHeader{{/isBinary}}{{^isBinary}}{{#isNullable}}*{{/isNullable}}{{{dataType}}}{{/isBinary}}{{/isFreeFormObject}}{
+    return m.{{name}}
+}
+
+// Set{{name}} set {{name}}
+func (m *{{classname}}) Set{{name}} (val {{#isFreeFormObject}}map[string]interface{}{{/isFreeFormObject}}{{^isFreeFormObject}}{{#isBinary}}*multipart.FileHeader{{/isBinary}}{{^isBinary}}{{#isNullable}}*{{/isNullable}}{{{dataType}}}{{/isBinary}}{{/isFreeFormObject}}) {
+    m.{{name}} = val
+}
+{{/vendorExtensions.x-go-mongo-id}}{{/vars}}

@@ -1,0 +1,27 @@
+    {
+        // Get and validate {{paramName}}
+        var err error
+        {{#isFormParam}}
+        api.{{paramName}}, err = c.FormFile("{{baseName}}")
+        {{/isFormParam}}
+
+        {{#required}}
+        if err != nil || api.{{paramName}} == nil {
+            c.JSON(http.StatusBadRequest, gin.H{
+                "code": 400,
+                "message": "{{paramName}} is required",
+            })
+            return
+        }
+        {{/required}}
+
+        {{#maxLength}}
+        if api.{{paramName}}.Size > {{#vendorExtensions.x-maxLength-provider}}{{{vendorExtensions.x-maxLength-provider}}}{{/vendorExtensions.x-maxLength-provider}}{{^vendorExtensions.x-maxLength-provider}}{{maxLength}}{{/vendorExtensions.x-maxLength-provider}} {
+            c.JSON(http.StatusBadRequest, gin.H{
+                "code": 400,
+                "message": fmt.Sprintf("{{paramName}} should have maximum size of %v", {{#vendorExtensions.x-maxLength-provider}}{{{vendorExtensions.x-maxLength-provider}}}{{/vendorExtensions.x-maxLength-provider}}{{^vendorExtensions.x-maxLength-provider}}{{maxLength}}{{/vendorExtensions.x-maxLength-provider}}),
+            })
+            return
+        }
+        {{/maxLength}}
+    }

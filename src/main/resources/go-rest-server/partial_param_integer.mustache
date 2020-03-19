@@ -1,0 +1,27 @@
+{{#isQueryParam}}    {
+    var err error
+    {{#isNullable}}
+    api.{{paramName}}, err = api.GetQueryInt32Nullable("{{baseName}}")
+    {{/isNullable}}
+    {{^isNullable}}
+        {{#required}}
+            api.{{paramName}}, err = api.GetQueryInt32("{{baseName}}")
+        {{/required}}
+        {{^required}}
+            api.{{paramName}}, err = api.GetQueryInt32Nullable("{{baseName}}")
+        {{/required}}
+    {{/isNullable}}
+
+    if err != nil {
+        c.JSON(http.StatusBadRequest, err)
+        return
+    }
+    }{{/isQueryParam}}
+    {{^isQueryParam}}
+    {{#isFormParam}}
+    api.{{paramName}} = c.PostForm("{{baseName}}")
+    {{/isFormParam}}
+    {{^isFormParam}}
+    api.{{paramName}} = c.Param("{{baseName}}")
+    {{/isFormParam}}
+    {{/isQueryParam}}

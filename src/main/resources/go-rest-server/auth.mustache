@@ -1,0 +1,21 @@
+{{>partial_header}}
+package {{packageName}}
+
+import "github.com/gin-gonic/gin"
+
+{{#authMethods}}
+{{#isBasicBearer}}
+// {{name}} authentication
+func {{name}} (c *gin.Context) (*Principal, error) {
+	// bearer := c.GetHeader("Authorization")
+    return &Principal{}, nil
+}
+{{/isBasicBearer}}
+
+{{#isApiKey}}
+func {{name}} (c *gin.Context) (*Principal, error) {
+    return &Principal{}, nil
+}
+{{/isApiKey}}
+
+{{/authMethods}}

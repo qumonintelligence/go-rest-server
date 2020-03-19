@@ -1,0 +1,45 @@
+    {{#isQueryParam}}
+    {{#isNullable}} 
+    if api.{{paramName}}, api.Error = api.GetQueryStringNullable("{{baseName}}",{{#defaultValue}}
+        validate.DefaultString("{{defaultValue}}"),{{/defaultValue}}{{#required}}
+        validate.RequiredString("{{paramName}} is required"),{{/required}}{{#minLength}}
+        validate.MinLength({{minLength}}, "{{paramName}} should have minimum length of {{minLength}}"),{{/minLength}}{{#maxLength}}
+        validate.MaxLength({{maxLength}}, "{{paramName}} should have maximum length of {{maxLength}}"),{{/maxLength}}); api.Error != nil {
+        c.JSON(http.StatusBadRequest, api.Error)
+        return
+    }
+
+    {{/isNullable}}
+    {{^isNullable}}
+        {{^required}}
+            if api.{{paramName}}, api.Error = api.GetQueryStringNullable("{{baseName}}",{{#defaultValue}}
+                validate.DefaultString("{{defaultValue}}"),{{/defaultValue}}{{#required}}
+                validate.RequiredString("{{paramName}} is required"),{{/required}}{{#minLength}}
+                validate.MinLength({{minLength}}, "{{paramName}} should have minimum length of {{minLength}}"),{{/minLength}}{{#maxLength}}
+                validate.MaxLength({{maxLength}}, "{{paramName}} should have maximum length of {{maxLength}}"),{{/maxLength}}); api.Error != nil {
+                c.JSON(http.StatusBadRequest, api.Error)
+                return
+            }
+    
+        {{/required}}
+        {{#required}}
+            if api.{{paramName}}, api.Error = api.GetQueryString("{{baseName}}",{{#defaultValue}}
+                validate.DefaultString("{{defaultValue}}"),{{/defaultValue}}{{#required}}
+                validate.RequiredString("{{paramName}} is required"),{{/required}}{{#minLength}}
+                validate.MinLength({{minLength}}, "{{paramName}} should have minimum length of {{minLength}}"),{{/minLength}}{{#maxLength}}
+                validate.MaxLength({{maxLength}}, "{{paramName}} should have maximum length of {{maxLength}}"),{{/maxLength}}); api.Error != nil {
+                c.JSON(http.StatusBadRequest, api.Error)
+                return
+            }
+        {{/required}}
+    {{/isNullable}}
+    {{/isQueryParam}}
+    {{^isQueryParam}}
+    {{#isFormParam}}
+    api.{{paramName}} = c.PostForm("{{baseName}}")
+    {{/isFormParam}}
+    {{^isFormParam}}
+    api.{{paramName}} = c.Param("{{baseName}}")
+    {{/isFormParam}}
+    {{/isQueryParam}}
+

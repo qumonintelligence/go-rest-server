@@ -1,0 +1,19 @@
+{{#required}}
+    if m.{{name}} == "" {
+        errs.Append(fmt.Errorf("{{name}} is required"))
+    }
+{{/required}}
+{{#minLength}}
+    if len(m.{{name}}) < {{minLength}} {
+        errs.Append(fmt.Errorf("{{name}} should have minimum length of {{minLength}}"))
+    }
+{{/minLength}}
+{{#maxLength}}
+    if len(m.{{name}}) > {{maxLength}} {
+        errs.Append(fmt.Errorf("{{name}} exceed maximum length {{maxLength}}"))
+    }
+{{/maxLength}}{{#isEnum}}
+    // {{name}} isEnum
+    if !validate.IsAllowedValue(m.{{name}}, []string { {{#allowableValues}}{{#enumVars}}{{{value}}},{{/enumVars}}{{/allowableValues}} }) {
+        errs.Append(fmt.Errorf("{{name}} value not allowed: %s", m.{{name}}))
+    }{{/isEnum}}

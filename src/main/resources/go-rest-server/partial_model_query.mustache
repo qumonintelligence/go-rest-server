@@ -1,0 +1,84 @@
+{{#vendorExtensions.x-go-mongo-collection}}
+
+// {{classname}}Collection query helper for {{classname}}
+type {{classname}}Collection struct {
+	Name string
+}
+
+// {{classname}}DAO an instant of {{classname}}Collection
+var {{classname}}DAO {{classname}}Collection
+
+// init {{classname}}DAO
+func init () {
+	{{classname}}DAO = {{classname}}Collection{
+		Name: "{{vendorExtensions.x-go-mongo-collection}}",
+	}
+}
+
+// ~ DAO for collection --------------------------------------------------------
+
+// C collection for {{classname}}
+func (c *{{classname}}Collection) C() *mgdb.Collection {
+	return mongodb.Client.Collection(c.Name)
+}
+
+// Load a record from mongo
+func (c *{{classname}}Collection) Load (id interface{}) (m *{{classname}}, err error) {
+  m = &{{classname}}{}
+	err = c.C().FirstID(m, id).Error
+	return
+}
+
+// Count by given criteria
+func (c *{{classname}}Collection) Count(criteria map[string]interface{}) (int64, error) {
+	return c.C().Count(criteria)
+}
+
+// List a list of clients
+func (c *{{classname}}Collection) List(criteria map[string]interface{}, sort []string, page *pagination.Pagination) (results []*{{classname}}, err error) {
+
+	var skip, limit, count int64
+	if page == nil {
+		skip = -1
+		limit = -1
+	} else {
+		skip = page.Offset()
+		limit = page.Limit()
+		count, err = c.Count(criteria)
+		if err != nil || count == 0 {
+			return
+		}
+		page.SetCount(count)
+	}
+
+	rs, err := c.C().Find(criteria, sort, skip, limit)
+	if err != nil {
+		return nil, err
+	}
+
+	defer rs.Close()
+
+	for rs.Next() {
+		row := &{{classname}}{}
+		if err = rs.Decode(row); err != nil {
+			break
+		}
+		results = append(results, row)
+	}
+
+	return
+}
+
+// ~ DAO for model -------------------------------------------------------------
+
+// Insert the model
+func (m *{{name}}) Insert() error {
+	return {{classname}}DAO.C().Insert(m).Error
+}
+
+// Update the model
+func (m *{{name}}) Update() error {
+	return {{classname}}DAO.C().Update(m).Error
+}
+
+{{/vendorExtensions.x-go-mongo-collection}}

@@ -1,0 +1,13 @@
+{{^isReadOnly}}
+
+// Validates the model
+func (m *{{name}}) Validates () (errs status.Errors) {
+{{#vars}}
+{{#isString}}{{>partial_model_validates_string}}{{/isString}}
+{{#isNumber}}{{>partial_model_validates_number}}{{/isNumber}}
+{{#isLong}}{{>partial_model_validates_number}}{{/isLong}}
+{{/vars}}
+  return
+}
+
+{{/isReadOnly}}

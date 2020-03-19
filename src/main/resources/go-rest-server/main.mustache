@@ -1,0 +1,26 @@
+{{>partial_header}}
+package main
+
+import (
+	"flag"
+	"log"
+
+	"github.com/gin-gonic/gin"
+
+	sw "./{{apiPath}}"
+)
+
+func run(router *gin.Engine) {
+	port := flag.String("p", "8080", "port number")
+	host := flag.String("h", "0.0.0.0", "listening host")
+	flag.Parse()
+	log.Fatal(router.Run(*host + ":" + *port))
+}
+
+func main() {
+	log.Printf("Server started")
+
+	router := sw.NewRouter()
+
+	run(router)
+}

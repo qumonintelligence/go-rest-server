@@ -1,0 +1,19 @@
+{{^vendorExtensions.x-go-ignore}}
+{{#vendorExtensions.x-go-mongo-id}}
+    // x-go-mongo-id: {{description}}
+    mgdb.Document `bson:",inline"`
+{{/vendorExtensions.x-go-mongo-id}}
+{{^vendorExtensions.x-go-mongo-id}}
+    // {{nameInCamelCase}} {{description}}
+    {{#isFreeFormObject}}
+    {{nameInCamelCase}} map[string]interface{} `json:"{{baseName}}{{^required}},omitempty{{/required}}"{{#vendorExtensions.x-go-custom-tag}} {{{.}}}{{/vendorExtensions.x-go-custom-tag}}`
+    {{/isFreeFormObject}}{{^isFreeFormObject}}
+    {{#isBinary}}
+    {{nameInCamelCase}} *multipart.FileHeader `form:"{{baseName}}"{{#required}} binding:"required"{{/required}}`
+    {{/isBinary}}
+    {{^isBinary}}
+    {{nameInCamelCase}} {{#isNullable}}*{{/isNullable}}{{{dataType}}} `json:"{{baseName}}{{^required}},omitempty{{/required}}"{{#vendorExtensions.x-go-custom-tag}} {{{.}}}{{/vendorExtensions.x-go-custom-tag}}`
+    {{/isBinary}}
+    {{/isFreeFormObject}}
+{{/vendorExtensions.x-go-mongo-id}}
+{{/vendorExtensions.x-go-ignore}}
