@@ -23,6 +23,8 @@ func draw(router *gin.Engine, method string, pattern string, handler gin.Handler
 		router.PUT(pattern, handler)
 	case http.MethodDelete:
 		router.DELETE(pattern, handler)
+	case http.MethodPatch:
+		router.PATCH(pattern, handler)
 	}
 }
 
