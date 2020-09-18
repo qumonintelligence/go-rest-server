@@ -10,6 +10,7 @@ import (
 	"gitlab.qumon.ai/infini/go-rest/v2"
 	"gitlab.qumon.ai/infini/go-rest/v2/status"
 	"gitlab.qumon.ai/infini/go-rest/v2/validate"
+	"gitlab.qumon.ai/infini/go-jsonlogger/v2"
 )
 
 // draw the routes
@@ -30,7 +31,7 @@ func draw(router *gin.Engine, method string, pattern string, handler gin.Handler
 
 // NewRouter returns a new router.
 func NewRouter() *gin.Engine {
-	router := gin.Default()
+	router := jsonlogger.NewRouter()
 
 	// configure the server.
 	if err := Configure(router); err != nil {
@@ -141,6 +142,7 @@ func {{operationId}}Handler (c *gin.Context) {
 	{{#isNumber}}{{>partial_param_number}}{{/isNumber}}
 	{{#isInteger}}{{>partial_param_integer}}{{/isInteger}}
 	{{#isLong}}{{>partial_param_long}}{{/isLong}}
+	{{#isDateTime}}{{>partial_param_datetime}}{{/isDateTime}}
 	{{/queryParams}}
 
 	{{#formParams}}

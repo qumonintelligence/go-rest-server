@@ -10,7 +10,7 @@ public class GoRestServerGenerator extends GoGinServerCodegen implements Codegen
 
   // source folder where to write the files
   protected String sourceFolder = "src";
-  protected String apiVersion = "1.0.0";
+  protected String apiVersion = "1.0.2";
 
   /**
    * Configures the type of generator.
@@ -95,7 +95,28 @@ public class GoRestServerGenerator extends GoGinServerCodegen implements Codegen
   }
 
   @Override
+  public String toModelName(String name) {
+
+      if (name.equalsIgnoreCase("ip")) {
+        return "IP";
+      }
+
+      name = super.toModelName(name);
+
+        // make ID instead of Id
+        if (name.endsWith("Ip")) {
+          name = name.substring(0, name.length() - 2) + "IP";
+        }
+    
+      return name;
+  }
+
+  @Override
   public String toVarName(String name) {
+
+    String[] caps = {
+      "id", "ip"
+    };
 
     name = super.toVarName(name);
 
@@ -103,10 +124,21 @@ public class GoRestServerGenerator extends GoGinServerCodegen implements Codegen
       return "ID";
     }
 
+
+    if (name.equalsIgnoreCase("ip")) {
+      return "IP";
+    }
+
+
     // make ID instead of Id
     if (name.endsWith("Id")) {
       name = name.substring(0, name.length() - 2) + "ID";
     }
+
+      // make ID instead of Id
+      if (name.endsWith("Ip")) {
+        name = name.substring(0, name.length() - 2) + "IP";
+      }
 
     return name;
   }
@@ -119,9 +151,13 @@ public class GoRestServerGenerator extends GoGinServerCodegen implements Codegen
       return "ID";
     }
 
+    if (name.equalsIgnoreCase("ip")) {
+      return "IP";
+    }
+
     // make ID instead of Id
-    if (name.endsWith("Id")) {
-      name = name.substring(0, name.length() - 2) + "ID";
+    if (name.endsWith("Ip")) {
+      name = name.substring(0, name.length() - 2) + "IP";
     }
 
     return name;
