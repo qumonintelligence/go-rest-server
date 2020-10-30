@@ -1,4 +1,4 @@
-VERSION=1.0.3
+VERSION=1.0.5
 
 package:
 	mvn package -Dmaven.test.skip=true

@@ -23,19 +23,19 @@ func (c *{{classname}}Collection) C() *mgdb.Collection {
 }
 
 // Load a record from mongo
-func (c *{{classname}}Collection) Load (id interface{}) (m *{{classname}}, err error) {
+func (c *{{classname}}Collection) Load (ctx context.Context, id interface{}) (m *{{classname}}, err error) {
   m = &{{classname}}{}
-	err = c.C().FirstID(m, id).Error
+	err = c.C().FirstID(ctx, m, id).Error
 	return
 }
 
 // Count by given criteria
-func (c *{{classname}}Collection) Count(criteria map[string]interface{}) (int64, error) {
-	return c.C().Count(criteria)
+func (c *{{classname}}Collection) Count(ctx context.Context, criteria map[string]interface{}) (int64, error) {
+	return c.C().Count(ctx, criteria)
 }
 
 // List a list of clients
-func (c *{{classname}}Collection) List(criteria map[string]interface{}, sort []string, page *pagination.Pagination) (results []*{{classname}}, err error) {
+func (c *{{classname}}Collection) List(ctx context.Context, criteria map[string]interface{}, sort []string, page *pagination.Pagination) (results []{{classname}}, err error) {
 
 	var skip, limit, count int64
 	if page == nil {
@@ -44,14 +44,14 @@ func (c *{{classname}}Collection) List(criteria map[string]interface{}, sort []s
 	} else {
 		skip = page.Offset()
 		limit = page.Limit()
-		count, err = c.Count(criteria)
+		count, err = c.Count(ctx, criteria)
 		if err != nil || count == 0 {
 			return
 		}
 		page.SetCount(count)
 	}
 
-	rs, err := c.C().Find(criteria, sort, skip, limit)
+	rs, err := c.C().Find(ctx, criteria, sort, skip, limit)
 	if err != nil {
 		return nil, err
 	}
@@ -59,8 +59,8 @@ func (c *{{classname}}Collection) List(criteria map[string]interface{}, sort []s
 	defer rs.Close()
 
 	for rs.Next() {
-		row := &{{classname}}{}
-		if err = rs.Decode(row); err != nil {
+		row := {{classname}}{}
+		if err = rs.Decode(&row); err != nil {
 			break
 		}
 		results = append(results, row)
@@ -72,13 +72,13 @@ func (c *{{classname}}Collection) List(criteria map[string]interface{}, sort []s
 // ~ DAO for model -------------------------------------------------------------
 
 // Insert the model
-func (m *{{name}}) Insert() error {
-	return {{classname}}DAO.C().Insert(m).Error
+func (m *{{name}}) Insert(ctx context.Context) error {
+	return {{classname}}DAO.C().Insert(ctx, m).Error
 }
 
 // Update the model
-func (m *{{name}}) Update() error {
-	return {{classname}}DAO.C().Update(m).Error
+func (m *{{name}}) Update(ctx context.Context) error {
+	return {{classname}}DAO.C().Update(ctx, m).Error
 }
 
 {{/vendorExtensions.x-go-mongo-collection}}
