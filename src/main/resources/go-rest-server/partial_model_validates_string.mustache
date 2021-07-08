@@ -14,6 +14,6 @@
     }
 {{/maxLength}}{{#isEnum}}
     // {{name}} isEnum
-    if !validate.IsAllowedValue(m.{{name}}, []string { {{#allowableValues}}{{#enumVars}}{{{value}}},{{/enumVars}}{{/allowableValues}} }) {
+    if m.{{name}} != "" && !validate.IsAllowedValue(m.{{name}}, []string { {{#allowableValues}}{{#enumVars}}{{{value}}},{{/enumVars}}{{/allowableValues}} }) {
         errs.Append(fmt.Errorf("{{name}} value not allowed: %s", m.{{name}}))
     }{{/isEnum}}

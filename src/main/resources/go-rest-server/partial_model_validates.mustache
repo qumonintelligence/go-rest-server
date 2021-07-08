@@ -3,6 +3,11 @@
 // Validates the model
 func (m *{{classname}}) Validates () (errs status.Errors) {
 {{#vars}}
+{{#isModel}} 
+    if errEx := m.{{name}}.Validates(); errEx.HasError() {
+      errs.Merge(errEx)
+    }
+{{/isModel}}
 {{#isString}}{{>partial_model_validates_string}}{{/isString}}
 {{#isNumber}}{{>partial_model_validates_number}}{{/isNumber}}
 {{#isLong}}{{>partial_model_validates_number}}{{/isLong}}

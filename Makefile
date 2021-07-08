@@ -1,8 +1,8 @@
-VERSION=1.0.5
+VERSION=1.0.6
 
 package:
 	mvn package -Dmaven.test.skip=true
-	cp target/go-rest-server-openapi-generator-$(VERSION).jar ~/Shared/Tools/code-generators
+	cp target/go-rest-server-openapi-generator-$(VERSION).jar ~/bin/
 
 clean:
 	mvn clean
