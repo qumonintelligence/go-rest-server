@@ -1,10 +1,10 @@
 package ai.qumon.codegen;
 
-import org.openapitools.codegen.*;
-import io.swagger.models.properties.*;
+import java.util.Objects;
+import org.openapitools.codegen.CodegenConfig;
+import org.openapitools.codegen.CodegenType;
+import org.openapitools.codegen.SupportingFile;
 import org.openapitools.codegen.languages.GoGinServerCodegen;
-import java.util.*;
-import java.io.File;
 
 public class GoRestServerGenerator extends GoGinServerCodegen implements CodegenConfig {
 
@@ -14,53 +14,30 @@ public class GoRestServerGenerator extends GoGinServerCodegen implements Codegen
 
   /**
    * Configures the type of generator.
-   * 
+   *
    * @return the CodegenType for this generator
    * @see org.openapitools.codegen.CodegenType
    */
+  @Override
   public CodegenType getTag() {
     return CodegenType.OTHER;
   }
 
   /**
-   * Configures a friendly name for the generator. This will be used by the
-   * generator to select the library with the -g flag.
-   * 
+   * Configures a friendly name for the generator. This will be used by the generator to select the
+   * library with the -g flag.
+   *
    * @return the friendly name for the generator
    */
+  @Override
   public String getName() {
     return "go-rest-server";
   }
 
-  /**
-   * Provides an opportunity to inspect and modify operation data before the code
-   * is generated.
-   */
-  @SuppressWarnings("unchecked")
-  @Override
-  public Map<String, Object> postProcessOperationsWithModels(Map<String, Object> objs, List<Object> allModels) {
-
-    // to try debugging your code generator:
-    // set a break point on the next line.
-    // then debug the JUnit test called LaunchGeneratorInDebugger
-
-    Map<String, Object> results = super.postProcessOperationsWithModels(objs, allModels);
-
-    Map<String, Object> ops = (Map<String, Object>) results.get("operations");
-    ArrayList<CodegenOperation> opList = (ArrayList<CodegenOperation>) ops.get("operation");
-
-    // iterate over the operation and perhaps modify something
-    for (CodegenOperation co : opList) {
-      // example:
-      // co.httpMethod = co.httpMethod.toLowerCase();
-    }
-
-    return results;
-  }
 
   /**
-   * Returns human-friendly help for the generator. Provide the consumer with help
-   * tips, parameters here
+   * Returns human-friendly help for the generator. Provide the consumer with help tips, parameters
+   * here
    *
    * @return A string value for the help message
    */
@@ -76,7 +53,7 @@ public class GoRestServerGenerator extends GoGinServerCodegen implements Codegen
     // set the output folder here
     outputFolder = "generated-code/go";
 
-    /**
+    /*
      * Template Location. This is the location which templates will be read from.
      * The generator will use the resource stream to attempt to read the templates.
      */
@@ -89,34 +66,32 @@ public class GoRestServerGenerator extends GoGinServerCodegen implements Codegen
   @Override
   public void processOpts() {
     super.processOpts();
+    // Don't generate the go.mod to restore original pre 5.x behavior.
+    supportingFiles.removeIf(file -> Objects.equals(file.getDestinationFilename(), "go.mod"));
     supportingFiles.add(new SupportingFile("static.index.html", "api", "index.html"));
-    writeOptional(outputFolder, new SupportingFile("configure.mustache", apiPath, "configure.go"));
-    writeOptional(outputFolder, new SupportingFile("auth.mustache", apiPath, "auth.go"));
+    supportingFiles.add(new SupportingFile("configure.mustache", apiPath, "configure.go").doNotOverwrite());
+    supportingFiles.add(new SupportingFile("auth.mustache", apiPath, "auth.go").doNotOverwrite());
   }
 
   @Override
   public String toModelName(String name) {
 
-      if (name.equalsIgnoreCase("ip")) {
-        return "IP";
-      }
+    if (name.equalsIgnoreCase("ip")) {
+      return "IP";
+    }
 
-      name = super.toModelName(name);
+    name = super.toModelName(name);
 
-        // make ID instead of Id
-        if (name.endsWith("Ip")) {
-          name = name.substring(0, name.length() - 2) + "IP";
-        }
-    
-      return name;
+    // make ID instead of Id
+    if (name.endsWith("Ip")) {
+      name = name.substring(0, name.length() - 2) + "IP";
+    }
+
+    return name;
   }
 
   @Override
   public String toVarName(String name) {
-
-    String[] caps = {
-      "id", "ip"
-    };
 
     name = super.toVarName(name);
 
@@ -124,21 +99,19 @@ public class GoRestServerGenerator extends GoGinServerCodegen implements Codegen
       return "ID";
     }
 
-
     if (name.equalsIgnoreCase("ip")) {
       return "IP";
     }
-
 
     // make ID instead of Id
     if (name.endsWith("Id")) {
       name = name.substring(0, name.length() - 2) + "ID";
     }
 
-      // make ID instead of Id
-      if (name.endsWith("Ip")) {
-        name = name.substring(0, name.length() - 2) + "IP";
-      }
+    // make ID instead of Id
+    if (name.endsWith("Ip")) {
+      name = name.substring(0, name.length() - 2) + "IP";
+    }
 
     return name;
   }
