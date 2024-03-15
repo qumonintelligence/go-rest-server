@@ -1,12 +1,17 @@
 {{^isReadOnly}}
-
 // Validates the model
 func (m *{{classname}}) Validates () (errs status.Errors) {
 {{#vars}}
-{{#isModel}} 
+{{#isModel}}
+{{#isNullable}}
+  if m.{{name}} != nil {
+{{/isNullable}}
     if errEx := m.{{name}}.Validates(); errEx.HasError() {
       errs.Merge(errEx)
     }
+{{#isNullable}}
+  }
+{{/isNullable}}
 {{/isModel}}
 {{#isString}}{{>partial_model_validates_string}}{{/isString}}
 {{#isNumber}}{{>partial_model_validates_number}}{{/isNumber}}
@@ -14,5 +19,4 @@ func (m *{{classname}}) Validates () (errs status.Errors) {
 {{/vars}}
   return
 }
-
 {{/isReadOnly}}

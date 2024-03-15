@@ -4,7 +4,7 @@
     <artifactId>go-rest-server-openapi-generator</artifactId>
     <packaging>jar</packaging>
     <name>go-rest-server-openapi-generator</name>
-    <version>2.0.1</version>
+    <version>2.0.2</version>
     <build>
         <plugins>
             <plugin>
