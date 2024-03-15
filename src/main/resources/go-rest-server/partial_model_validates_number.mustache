@@ -1,10 +1,10 @@
 {{#minium}}
-    if m.{{name}} < {{minium}} {
+    if {{#isNullable}}m.{{name}} != nil && *{{/isNullable}}m.{{name}} < {{minium}} {
         errs.Append(fmt.Errorf("{{name}} must be greater than {{minium}}"))
     }
 {{/minium}}
 {{#maximum}}
-    if m.{{name}} > {{maximum}} {
+    if {{#isNullable}}m.{{name}} != nil && *{{/isNullable}}m.{{name}} > {{maximum}} {
         errs.Append(fmt.Errorf("{{name}} must be less than {{maximum}}"))
     }
 {{/maximum}}
