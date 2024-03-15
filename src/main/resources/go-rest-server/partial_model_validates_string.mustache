@@ -1,19 +1,21 @@
 {{#required}}
-    if m.{{name}} == "" {
+    if {{#isNullable}}m.{{name}} == nil || {{/isNullable}}m.{{name}} == "" {
         errs.Append(fmt.Errorf("{{name}} is required"))
     }
 {{/required}}
 {{#minLength}}
-    if len(m.{{name}}) < {{minLength}} {
+    if {{#isNullable}}m.{{name}} != nil && {{/isNullable}}len({{#isNullable}}*{{/isNullable}}m.{{name}}) < {{minLength}} {
         errs.Append(fmt.Errorf("{{name}} should have minimum length of {{minLength}}"))
     }
 {{/minLength}}
 {{#maxLength}}
-    if len(m.{{name}}) > {{maxLength}} {
+    if {{#isNullable}}m.{{name}} != nil && {{/isNullable}}len({{#isNullable}}*{{/isNullable}}m.{{name}}) > {{maxLength}} {
         errs.Append(fmt.Errorf("{{name}} exceed maximum length {{maxLength}}"))
     }
-{{/maxLength}}{{#isEnum}}
+{{/maxLength}}
+{{#isEnum}}
     // {{name}} isEnum
-    if m.{{name}} != "" && !validate.IsAllowedValue(m.{{name}}, []string { {{#allowableValues}}{{#enumVars}}{{{value}}},{{/enumVars}}{{/allowableValues}} }) {
+    if {{#isNullable}}m.{{name}} != nil && {{/isNullable}}m.{{name}} != "" && !validate.IsAllowedValue({{#isNullable}}*{{/isNullable}}m.{{name}}, []string { {{#allowableValues}}{{#enumVars}}{{{value}}},{{/enumVars}}{{/allowableValues}} }) {
         errs.Append(fmt.Errorf("{{name}} value not allowed: %s", m.{{name}}))
-    }{{/isEnum}}
+    }
+{{/isEnum}}

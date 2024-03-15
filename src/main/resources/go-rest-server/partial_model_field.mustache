@@ -5,6 +5,9 @@
 {{/vendorExtensions.x-go-mongo-id}}
 {{^vendorExtensions.x-go-mongo-id}}
     // {{nameInCamelCase}} {{description}}
+    {{#deprecated}}
+      // Deprecated
+    {{/deprecated}}
     {{#isFreeFormObject}}
     {{nameInCamelCase}} map[string]interface{} `json:"{{baseName}}{{^required}},omitempty{{/required}}"{{#vendorExtensions.x-go-custom-tag}} {{{.}}}{{/vendorExtensions.x-go-custom-tag}}`
     {{/isFreeFormObject}}{{^isFreeFormObject}}
