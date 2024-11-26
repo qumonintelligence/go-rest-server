@@ -33,6 +33,9 @@ jobs:
     # Archive the JAR as an artifact
     - name: Upload JAR artifact
       uses: actions/upload-artifact@v4
+      run: |
+        tag=${GITHUB_REF##*/}
+        mv target/*.jar target/go-rest-server-${tag}.jar
       with:
         name: go-rest-server-${{ github.ref_name }}
         path: target/go-rest-server-${{ github.ref_name }}.jar
