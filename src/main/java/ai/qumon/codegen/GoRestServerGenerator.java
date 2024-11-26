@@ -70,7 +70,9 @@ public class GoRestServerGenerator extends GoGinServerCodegen implements Codegen
     supportingFiles.removeIf(file -> Objects.equals(file.getDestinationFilename(), "go.mod"));
     supportingFiles.add(new SupportingFile("static.index.html", "api", "index.html"));
     supportingFiles.add(new SupportingFile("configure.mustache", apiPath, "configure.go").doNotOverwrite());
-    supportingFiles.add(new SupportingFile("auth.mustache", apiPath, "auth.go").doNotOverwrite());
+    // supportingFiles.add(new SupportingFile("auth.mustache", apiPath, "auth.go").doNotOverwrite());
+    supportingFiles.add(new SupportingFile("auth.mustache", apiPath, "auth.go")
+                .doNotOverwrite());
   }
 
   @Override
