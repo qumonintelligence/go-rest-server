@@ -3,12 +3,10 @@ package {{packageName}}
 
 import (
 	"github.com/gin-gonic/gin"
-	"gitlab.qumon.ai/infini/go-sentry/v2/ginsentry"
 )
 
 // Configure the server
 func Configure (router *gin.Engine) error {
-	ginsentry.ConfigureSentry(router)
     router.Static("{{{basePathWithoutHost}}}/help", "./api")
     return nil
 }
