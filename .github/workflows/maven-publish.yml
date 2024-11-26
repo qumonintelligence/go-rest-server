@@ -26,20 +26,13 @@ jobs:
       with:
         java-version: '17'
         distribution: 'temurin'
-        # server-id: github # Value of the distributionManagement/repository/id field of the pom.xml
-        # settings-path: ${{ github.workspace }} # location for the settings.xml file
 
     - name: Build with Maven
       run: mvn package -Dmaven.test.skip=true
 
-    # - name: Publish to GitHub Packages Apache Maven
-    #   run: mvn deploy -s $GITHUB_WORKSPACE/settings.xml
-    #   env:
-    #     GITHUB_TOKEN: ${{ github.token }}
-    
     # Archive the JAR as an artifact
     - name: Upload JAR artifact
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
-        name: application-jar
-        path: target/*.jar
+        name: go-rest-server-${{ github.ref_name }}
+        path: target/go-rest-server-${{ github.ref_name }}.jar
