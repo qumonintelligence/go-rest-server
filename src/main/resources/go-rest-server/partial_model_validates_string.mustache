@@ -16,6 +16,6 @@
 {{#isEnum}}
     // {{name}} isEnum
     if {{#isNullable}}m.{{name}} != nil && {{#isNullable}}*{{/isNullable}}{{/isNullable}}m.{{name}} != "" && !validate.IsAllowedValue({{#isNullable}}*{{/isNullable}}m.{{name}}, []string { {{#allowableValues}}{{#enumVars}}{{{value}}},{{/enumVars}}{{/allowableValues}} }) {
-        errs.Append(fmt.Errorf("{{name}} value not allowed: %s", m.{{name}}))
+        errs.Append(fmt.Errorf("{{name}} value not allowed: %s", {{#isNullable}}*{{/isNullable}}m.{{name}}))
     }
 {{/isEnum}}
